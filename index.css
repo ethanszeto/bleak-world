@@ -12,3 +12,8 @@ body {
   height: 100%;
   background-color: #145d09;
 }
+
+#browser-framerate {
+  position: absolute;
+  color: #ffffff;
+}

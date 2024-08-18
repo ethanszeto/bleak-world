@@ -19,6 +19,9 @@ window.addEventListener("load", () => {
     canvas.height = window.innerHeight;
     canvasHeight = canvas.height;
     render(canvas, world);
+    document.getElementById("browser-framerate").innerHTML = `Frames: ${framesPlayed} | Delta: ${
+      Math.round((avgDelta / framesPlayed) * 1000) / 1000
+    }`;
   }, 1000 / 60);
 });
 

@@ -1,36 +1,39 @@
 const setUpGameFrame = (canvas, world) => {
-  player = new Box(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize * 2, rgba(255, 255, 255, 1));
+  player = new MovingBox(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize * 2, rgba(255, 255, 255, 1));
   camera = new Box(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize, rgba(0, 0, 0, 0.5));
+  halfCanvasWidth = canvasWidth / 2;
+  halfCanvasHeight = canvasHeight / 2;
+  blockSizeMarginH = world.blockSize * marginH;
+  blockSizeMarginV = world.blockSize * marginV;
 };
 
 function smoothstep(t) {
-  return t * t * (3 - 2 * t);
+  return t ** 2 * (3 - 2 * t);
 }
 
 function smootherstep(t) {
-  return t * t * t * (t * (t * 6 - 15) + 10);
-}
-
-function lerp(start, end, t) {
-  return start + (end - start) * t;
+  return t ** 3 * (t * (t * 6 - 15) + 10);
 }
 
 const render = (canvas, world) => {
+  var now = performance.now();
+  dt = (now - lastUpdate) / 15;
+  console.log(now - lastUpdate);
+  framesPlayed++;
+  avgDelta += now - lastUpdate;
+
+  lastUpdate = now;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   player.speedX = 0;
   player.speedY = 0;
-  camera.speedX = 0;
-  camera.speedY = 0;
-
-  // Calculate the visible range
-  const marginV = world.blockSize * 16; // Adjust this value as needed
-  const marginH = world.blockSize * 8;
 
   // Calculate the extended visible range
-  const visibleMinX = Math.round(player.x / world.blockSize) * world.blockSize - canvasWidth / 2 - marginH;
-  const visibleMaxX = visibleMinX + canvasWidth + marginH * 2;
-  const visibleMinY = Math.round(player.y / world.blockSize) * world.blockSize - canvasHeight / 2 - marginV;
-  const visibleMaxY = visibleMinY + canvasHeight + marginV * 2;
+  const visibleMinX = Math.round(player.x / world.blockSize) * world.blockSize - (halfCanvasWidth - blockSizeMarginH);
+  const visibleMaxX = visibleMinX + canvasWidth + blockSizeMarginH * -2;
+
+  const visibleMinY = Math.round(player.y / world.blockSize) * world.blockSize - (halfCanvasHeight - blockSizeMarginV);
+  const visibleMaxY = visibleMinY + canvasHeight + blockSizeMarginV * -2 - world.blockSize * 3;
 
   for (let y = visibleMinY; y < visibleMaxY; y += world.blockSize) {
     for (let x = visibleMinX; x < visibleMaxX; x += world.blockSize) {
@@ -39,7 +42,7 @@ const render = (canvas, world) => {
         tempAllObjs[x] = {};
       }
 
-      tempAllObjs[x][y] = box;
+      if (!tempAllObjs[x][y]) tempAllObjs[x][y] = box;
     }
   }
 
@@ -58,22 +61,16 @@ const render = (canvas, world) => {
         delete tempAllObjs[x];
       }
     }
-  } // Rate at which gravity increases over time
+  }
 
-  // Gravity variables
-
-  // Reset speeds before checking controls
   player.speedY += gravity;
-  camera.speedY -= gravity;
 
   // Horizontal movement
   if (gameSpace["a"]) {
     player.speedX = -playerSpeed;
-    camera.speedX = playerSpeed;
   }
   if (gameSpace["d"]) {
     player.speedX = playerSpeed;
-    camera.speedX = -playerSpeed;
   }
 
   // Flappy Bird-like jump, only once per press
@@ -84,11 +81,11 @@ const render = (canvas, world) => {
   }
 
   if (jumpState && jumpState < 10) {
-    player.speedY = -(jumpState > 5 ? 10 - jumpState : jumpState) * 4;
-    camera.speedY = -(jumpState > 5 ? 10 - jumpState : jumpState) * 4;
-    jumpState++;
-  } else if (jumpState && jumpState < 20) jumpState++;
-  if (jumpState >= 20) {
+    player.speedY = -(jumpState > 5 ? (10 - jumpState) ** 2 : jumpState ** 2);
+
+    jumpState += dt;
+  } else if (jumpState && jumpState < 30) jumpState += dt;
+  if (jumpState >= 30) {
     // Reset spacePressed when the space bar is released
     jumpState = 0;
   }
@@ -99,17 +96,7 @@ const render = (canvas, world) => {
   print(tempAllObjs);
 
   camera.update();
-  const t = 0.25; // Adjust t for smoothness; 0 < t < 1
   camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);
-  //camera.y = bezier(t, camera.y, camera.y + (player.y - camera.y) * 0.5, camera.y + (player.y - camera.y) * 0.5, player.y);
-
-  // let t = 0.25; // Adjust t for smoothness; 0 < t < 1
-  // camera.x = lerp(camera.x, player.x, t);
-  camera.y = lerp(camera.y, player.y, t);
-  camera.newPos();
+  camera.y = lerp(camera.y, player.y, smootherT);
   player.update();
-  player.newPos();
-
-  player.draw();
-  camera.draw();
 };
