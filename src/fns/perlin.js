@@ -28,10 +28,10 @@ class PerlinNoiseGenerator {
     this.perm = this.permutation.concat(this.permutation);
   }
 
-  setScale(baseScale, variationIntensity = 0, variationScale = 0.1) {
-    this.baseScale = baseScale;
-    this.variationIntensity = variationIntensity;
-    this.variationScale = variationScale;
+  setScale(baseScale = 1, variationIntensity = 3, variationScale = 3) {
+    this.baseScale = baseScale / 1000;
+    this.variationIntensity = variationIntensity / 1000;
+    this.variationScale = variationScale / 10000;
   }
 
   fade(t) {
