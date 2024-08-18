@@ -3,6 +3,14 @@ const setUpGameFrame = (canvas, world) => {
   camera = new Box(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize, rgba(0, 0, 0, 0.5));
 };
 
+function smoothstep(t) {
+  return t * t * (3 - 2 * t);
+}
+
+function smootherstep(t) {
+  return t * t * t * (t * (t * 6 - 15) + 10);
+}
+
 function lerp(start, end, t) {
   return start + (end - start) * t;
 }
@@ -75,12 +83,12 @@ const render = (canvas, world) => {
     gravity = initialGravity;
   }
 
-  if (jumpState && jumpState < 5) {
-    player.speedY = (-1 / player.speedY) * 15;
-    camera.speedY = (-1 / camera.speedY) * 15;
+  if (jumpState && jumpState < 10) {
+    player.speedY = -(jumpState > 5 ? 10 - jumpState : jumpState) * 4;
+    camera.speedY = -(jumpState > 5 ? 10 - jumpState : jumpState) * 4;
     jumpState++;
-  } else if (jumpState && jumpState < 15) jumpState++;
-  if (jumpState >= 15) {
+  } else if (jumpState && jumpState < 20) jumpState++;
+  if (jumpState >= 20) {
     // Reset spacePressed when the space bar is released
     jumpState = 0;
   }
@@ -91,12 +99,12 @@ const render = (canvas, world) => {
   print(tempAllObjs);
 
   camera.update();
-  // const t = 0.1; // Adjust t for smoothness; 0 < t < 1
-  // camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);
-  // camera.y = bezier(t, camera.y, camera.y + (player.y - camera.y) * 0.5, camera.y + (player.y - camera.y) * 0.5, player.y);
+  const t = 0.25; // Adjust t for smoothness; 0 < t < 1
+  camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);
+  //camera.y = bezier(t, camera.y, camera.y + (player.y - camera.y) * 0.5, camera.y + (player.y - camera.y) * 0.5, player.y);
 
-  const t = 0.5; // Adjust t for smoothness; 0 < t < 1
-  camera.x = lerp(camera.x, player.x, t);
+  // let t = 0.25; // Adjust t for smoothness; 0 < t < 1
+  // camera.x = lerp(camera.x, player.x, t);
   camera.y = lerp(camera.y, player.y, t);
   camera.newPos();
   player.update();
