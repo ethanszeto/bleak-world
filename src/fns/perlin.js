@@ -9,10 +9,10 @@ class PerlinNoiseGenerator {
     this.baseScale = 0.001;
     this.variationScale = 0.003;
     this.variationIntensity = 0.0003;
-    this.threshold = 0.5; // Threshold for larger caves
+    this.threshold = 0.4; // Threshold for larger caves
     this.smallCaveThreshold = 0.01; // Threshold for smaller caves
-    this.tunnelEffect = 0.1; // Strength of tunneling effect
-    this.smallCaveScale = 0.001; // Scale factor for smaller caves
+    this.tunnelEffect = 0.5; // Strength of tunneling effect
+    this.smallCaveScale = 0.0015; // Scale factor for smaller caves
     this.setSeed(Math.random());
   }
 
