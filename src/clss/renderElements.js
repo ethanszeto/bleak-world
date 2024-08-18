@@ -30,7 +30,7 @@ class Circle extends Base {
     this.color = color;
   }
 
-  draw(ctx) {
+  draw() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
     ctx.fillStyle = this.color;
@@ -65,9 +65,25 @@ class Box extends Base {
     this.color = color;
   }
 
-  draw(ctx) {
+  draw() {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
+
+  update() {
+    ctx.save();
+    ctx.translate(antiPlayer.x - canvas.width / 2, antiPlayer.y - canvas.height / 2);
+    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.rotate(this.angle);
+    ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.restore();
+  }
+
+  newPos() {
+    this.x += this.speedX;
+    this.y += this.speedY;
   }
 
   // Dispatch based on the type of the other object

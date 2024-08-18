@@ -1,0 +1,10 @@
+let player;
+let antiPlayer;
+let canvas;
+let canvasHeight;
+let canvasWidth;
+let world;
+let ctx;
+let gameSpace = [];
+let playerSpeed = 20;
+let tempAllObjs = {};
