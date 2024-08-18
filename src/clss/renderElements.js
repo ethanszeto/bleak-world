@@ -71,10 +71,16 @@ class Box extends Base {
   }
 
   update() {
+    // ctx.save();
+    // // Translate the context to the camera's position
+    // ctx.translate(-camera.x + canvas.width / 2, -camera.y + canvas.height / 2);
+    // // Draw the object relative to the new context origin
+    // ctx.fillStyle = this.color;
+    // ctx.fillRect(this.x, this.y, this.width, this.height);
+    // ctx.restore();
     ctx.save();
-    ctx.translate(antiPlayer.x - canvas.width / 2, antiPlayer.y - canvas.height / 2);
+    ctx.translate(-camera.x + canvas.width / 2, -camera.y + canvas.height / 2);
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-    ctx.rotate(this.angle);
     ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);

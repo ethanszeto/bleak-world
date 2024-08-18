@@ -1,6 +1,6 @@
 class WorldGenerator {
   generate = (seed) => {
-    this.zoom = 1;
+    this.zoom = 2;
     this.blockSize = 32 / this.zoom;
     this.blockCache = [[]];
     this.perlin = new PerlinNoiseGenerator();

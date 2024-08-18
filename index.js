@@ -2,7 +2,8 @@ canvas = document.getElementById("canvas");
 
 window.addEventListener("load", () => {
   world = new WorldGenerator();
-  world.generate(111634516782378);
+  // world.generate(111634516782378);
+  world.generate(Math.floor(Math.random() * 10000000));
 
   canvas.width = window.innerWidth;
   canvasWidth = canvas.width;
