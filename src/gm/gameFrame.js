@@ -73,7 +73,7 @@ const render = (canvas, world) => {
   }
 
   // Flappy Bird-like jump, only once per press
-  if (!jumpState && gameSpace[" "]) {
+  if (!jumpState && (gameSpace[" "] || gameSpace["w"])) {
     // Space bar pressed and wasn't pressed before
     jumpState = 1;
     gravity = initialGravity;
@@ -89,7 +89,7 @@ const render = (canvas, world) => {
     jumpState = 0;
   }
 
-  // Increase gravity over time
+  // Increase gravity over timed
   if (gravity < maxGravity) gravity += gravityIncreaseRate;
 
   print(tempAllObjs);
