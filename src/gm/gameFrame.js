@@ -18,7 +18,6 @@ function smootherstep(t) {
 const render = (canvas, world) => {
   var now = performance.now();
   dt = (now - lastUpdate) / 15;
-  console.log(now - lastUpdate);
   framesPlayed++;
   avgDelta += now - lastUpdate;
 
@@ -80,12 +79,12 @@ const render = (canvas, world) => {
     gravity = initialGravity;
   }
 
-  if (jumpState && jumpState < 10) {
-    player.speedY = -(jumpState > 5 ? (10 - jumpState) ** 2 : jumpState ** 2);
+  if (jumpState && jumpState < 25) {
+    player.speedY = -(jumpState > 12 ? 25 - jumpState : jumpState);
 
     jumpState += dt;
-  } else if (jumpState && jumpState < 30) jumpState += dt;
-  if (jumpState >= 30) {
+  } else if (jumpState && jumpState < 40) jumpState += dt;
+  if (jumpState >= 40) {
     // Reset spacePressed when the space bar is released
     jumpState = 0;
   }
