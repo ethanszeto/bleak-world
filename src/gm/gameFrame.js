@@ -29,9 +29,8 @@ const render = (canvas, world) => {
     now = performance.now();
     dt = (now - lastUpdate) / 16;
     framesPlayed++;
-    totalDelta += now - lastUpdate;
-    timeSinceLastCameraAdjustment += now - lastUpdate;
-    timeSinceLastGravityCalculation += now - lastUpdate;
+    delta = now - lastUpdate;
+    totalDelta += delta;
     lastUpdate = now;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -73,7 +72,7 @@ const render = (canvas, world) => {
       }
     }
 
-    handleTimeInterval(timeSinceLastGravityCalculation, gravityCalculationRate, dt, () => {
+    handleTimeInterval(timeSinceLastGravityCalculation, gravityCalculationRate, delta, () => {
       // Increase gravity over time
       if (gravity < maxGravity * dt) {
         gravity += gravityIncreaseRate * dt;
@@ -83,6 +82,14 @@ const render = (canvas, world) => {
       }
       player.speedY = gravity;
     });
+    // Increase gravity over time
+    // if (gravity < maxGravity * dt) {
+    //   gravity += gravityIncreaseRate * dt;
+    // }
+    // if (gravity > maxGravity * dt) {
+    //   gravity = maxGravity * dt;
+    // }
+    // player.speedY = gravity;
 
     // Horizontal movement
     if (gameSpace["a"]) {
@@ -111,10 +118,11 @@ const render = (canvas, world) => {
 
     print(tempAllObjs);
 
-    handleTimeInterval(timeSinceLastCameraAdjustment, cameraAdjustmentIntervalRate, dt, () => {
+    console.log(timeSinceLastCameraAdjustment, delta);
+
+    handleTimeInterval(timeSinceLastCameraAdjustment, cameraAdjustmentIntervalRate, delta, () => {
       camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);
       camera.y = lerp(camera.y, player.y, smootherT);
-      timeSinceLastCameraAdjustment = timeSinceLastCameraAdjustment - cameraAdjustmentIntervalRate;
     });
 
     camera.update();

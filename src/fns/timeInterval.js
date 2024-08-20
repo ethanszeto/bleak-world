@@ -1,7 +1,7 @@
 function handleTimeInterval(counter, rate, elapsedTime, callback) {
-  counter += elapsedTime;
+  counter[0] += elapsedTime;
   if (counter > rate) {
     callback();
-    counter -= rate;
+    counter[0] = counter[0] - rate;
   }
 }

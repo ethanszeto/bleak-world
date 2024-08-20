@@ -2,8 +2,8 @@ canvas = document.getElementById("canvas");
 
 window.addEventListener("load", () => {
   world = new WorldGenerator();
-  world.generate(111634516782378);
-  // world.generate(Math.floor(Math.random() * 1000000000000));
+  //world.generate(111634516782378);
+  world.generate(Math.floor(Math.random() * 1000000000000));
 
   canvas.width = window.innerWidth;
   canvasWidth = canvas.width;
@@ -19,7 +19,7 @@ window.addEventListener("load", () => {
     canvas.height = window.innerHeight;
     canvasHeight = canvas.height;
     render(canvas, world);
-  }, 16);
+  }, 32);
 });
 
 window.addEventListener("keydown", (e) => {
