@@ -12,4 +12,7 @@ A project where I explore the depths of mathematics' application in game develop
 ## Theory Used:
 - Lazy Loading / Unloading
 - Procedural World Generation
+- Class Inheritence
+- Method Overriding
 - Hash Table (soon)
+
