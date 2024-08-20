@@ -14,5 +14,5 @@ A project where I explore the depths of mathematics' application in game develop
 - Procedural World Generation
 - Class Inheritence
 - Method Overriding
-- Hash Table (soon)
+- Spatial Hashing
 
