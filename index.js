@@ -2,8 +2,8 @@ canvas = document.getElementById("canvas");
 
 window.addEventListener("load", () => {
   world = new WorldGenerator();
-  // world.generate(111634516782378);
-  world.generate(Math.floor(Math.random() * 10000000));
+  world.generate(111634516782378);
+  // world.generate(Math.floor(Math.random() * 1000000000000));
 
   canvas.width = window.innerWidth;
   canvasWidth = canvas.width;
@@ -19,9 +19,6 @@ window.addEventListener("load", () => {
     canvas.height = window.innerHeight;
     canvasHeight = canvas.height;
     render(canvas, world);
-    document.getElementById("browser-framerate").innerHTML = `Frames: ${framesPlayed} | Delta: ${
-      Math.round((avgDelta / framesPlayed) * 1000) / 1000
-    }`;
   }, 1000 / 60);
 });
 
@@ -30,5 +27,5 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
-  gameSpace[e.key] = false;
+  delete gameSpace[e.key];
 });

@@ -5,6 +5,45 @@ class Base {
   }
 }
 
+class Text extends Base {
+  constructor(x, y, color, font, text) {
+    super(x, y);
+    this.color = color;
+    this.font = font;
+    this.text = text;
+  }
+
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.font = this.font;
+    ctx.fillText(this.text, this.x, this.y);
+  }
+
+  update() {
+    let m = ctx.measureText(this.text);
+    ctx.save();
+    ctx.translate(-camera.x + canvas.width / 2, -camera.y + canvas.height / 2);
+    ctx.translate(this.x + m.width / 2, this.y + m.height / 2);
+    ctx.translate(-(this.x + m.width / 2), -(this.y + m.height / 2));
+    this.draw();
+    ctx.restore();
+  }
+}
+
+class UIText extends Text {
+  constructor(x, y, color, font, text) {
+    super(x, y, color, font, text);
+  }
+
+  update() {
+    this.draw();
+  }
+
+  updateText(text) {
+    this.text = text;
+  }
+}
+
 class Circle extends Base {
   constructor(x, y, radius, color) {
     super(x, y);
@@ -20,6 +59,7 @@ class Circle extends Base {
   }
 
   update() {
+    // fix to translate circle properly
     ctx.save();
     ctx.translate(-camera.x + canvas.width / 2, -camera.y + canvas.height / 2);
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
@@ -55,6 +95,8 @@ class Box extends Base {
 class MovingBox extends Box {
   constructor(x, y, width, height, color) {
     super(x, y, width, height, color);
+    this.speedX = 0;
+    this.speedY = 0;
   }
 
   update() {
