@@ -1,6 +1,6 @@
 const setUpGameFrame = (canvas, world) => {
-  player = new MovingBox(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize * 2, rgba(255, 255, 255, 1));
-  camera = new Box(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize, rgba(0, 0, 0, 0.5));
+  player = new Player(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize * 2, rgba(255, 255, 255, 1));
+  camera = new Camera(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize, rgba(0, 0, 0, 0.5));
   halfCanvasWidth = canvasWidth / 2;
   halfCanvasHeight = canvasHeight / 2;
   blockSizeMarginH = world.blockSize * marginH;
@@ -27,10 +27,11 @@ const render = (canvas, world) => {
   }
   if (!paused) {
     now = performance.now();
-    dt = (now - lastUpdate) / 15;
+    dt = (now - lastUpdate) / 16;
     framesPlayed++;
     totalDelta += now - lastUpdate;
-
+    timeSinceLastCameraAdjustment += now - lastUpdate;
+    timeSinceLastGravityCalculation += now - lastUpdate;
     lastUpdate = now;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -72,7 +73,16 @@ const render = (canvas, world) => {
       }
     }
 
-    player.speedY += gravity;
+    handleTimeInterval(timeSinceLastGravityCalculation, gravityCalculationRate, dt, () => {
+      // Increase gravity over time
+      if (gravity < maxGravity * dt) {
+        gravity += gravityIncreaseRate * dt;
+      }
+      if (gravity > maxGravity * dt) {
+        gravity = maxGravity * dt;
+      }
+      player.speedY = gravity;
+    });
 
     // Horizontal movement
     if (gameSpace["a"]) {
@@ -86,11 +96,11 @@ const render = (canvas, world) => {
     if (!jumpState && (gameSpace[" "] || gameSpace["w"])) {
       // Space bar pressed and wasn't pressed before
       jumpState = 1;
-      gravity = initialGravity;
+      gravity = initialGravity * dt;
     }
 
     if (jumpState && jumpState < 25) {
-      player.speedY = -(jumpState > 12 ? 25 - jumpState : jumpState);
+      player.speedY = -(jumpState > 12 ? (25 - jumpState) * dt : jumpState * dt);
 
       jumpState += dt;
     } else if (jumpState && jumpState < 40) jumpState += dt;
@@ -99,19 +109,21 @@ const render = (canvas, world) => {
       jumpState = 0;
     }
 
-    // Increase gravity over timed
-    if (gravity < maxGravity) gravity += gravityIncreaseRate;
-
     print(tempAllObjs);
 
+    handleTimeInterval(timeSinceLastCameraAdjustment, cameraAdjustmentIntervalRate, dt, () => {
+      camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);
+      camera.y = lerp(camera.y, player.y, smootherT);
+      timeSinceLastCameraAdjustment = timeSinceLastCameraAdjustment - cameraAdjustmentIntervalRate;
+    });
+
     camera.update();
-    camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);
-    camera.y = lerp(camera.y, player.y, smootherT);
     player.update();
 
     UIstatistics.frames.updateText(`Frames Played: ${framesPlayed}`);
     UIstatistics.frameRate.updateText(`FrameRate: ${(1000 / (totalDelta / framesPlayed)).toFixed(3)}`);
     UIstatistics.playerPosition.updateText(`Player's Position (x: ${player.x.toFixed(3)}, y: ${player.y.toFixed(3)})`);
+    UIstatistics.playerSpeed.updateText(`Player's Speed (x: ${(player.speedX * dt).toFixed(3)}, y: ${player.speedY.toFixed(3)})`);
 
     printUIStatistics();
   }

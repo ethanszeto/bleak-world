@@ -32,3 +32,7 @@ let framesPlayed = 0;
 let paused = false;
 let now;
 let UIstatistics;
+let timeSinceLastCameraAdjustment = 0;
+const cameraAdjustmentIntervalRate = 30;
+let timeSinceLastGravityCalculation = 0;
+const gravityCalculationRate = 16;

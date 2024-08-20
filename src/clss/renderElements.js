@@ -111,8 +111,21 @@ class MovingBox extends Box {
   }
 }
 
+class Player extends Box {
+  update() {
+    ctx.save();
+    ctx.translate(-camera.x + canvas.width / 2, -camera.y + canvas.height / 2);
+    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
+    this.draw();
+    ctx.restore();
+    this.x += this.speedX * dt;
+    this.y += this.speedY; //gravity already uses dt, since its frame-incremental
+  }
+}
+
 class Camera extends Box {
-  constructor() {
-    super(0, 0, 0, 0, rgba(0, 0, 0, 0));
+  constructor(x = 0, y = 0, width = 0, height = 0, color = rgba(0, 0, 0, 0)) {
+    super(x, y, width, height, color);
   }
 }
