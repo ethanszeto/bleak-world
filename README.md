@@ -11,5 +11,5 @@ A project where I explore the depths of mathematics' application in game develop
 
 ## Theory Used:
 - Lazy Loading / Unloading
-- Proceduaral World Generation
+- Procedural World Generation
 - Hash Table (soon)
