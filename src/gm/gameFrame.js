@@ -38,20 +38,24 @@ const render = (canvas, world) => {
     player.speedY = 0;
 
     // Calculate the extended visible range
-    const visibleMinX = Math.round(player.x / world.blockSize) * world.blockSize - (halfCanvasWidth - blockSizeMarginH);
+    const visibleMinX =
+      Math.round(player.x / world.blockSize) * world.blockSize - (Math.floor(halfCanvasWidth) - blockSizeMarginH);
     const visibleMaxX = visibleMinX + canvasWidth + blockSizeMarginH * -2;
 
-    const visibleMinY = Math.round(player.y / world.blockSize) * world.blockSize - (halfCanvasHeight - blockSizeMarginV);
+    const visibleMinY =
+      Math.round(player.y / world.blockSize) * world.blockSize - (Math.floor(halfCanvasHeight) - blockSizeMarginV);
     const visibleMaxY = visibleMinY + canvasHeight + blockSizeMarginV * -2 - world.blockSize * 3;
 
     for (let y = visibleMinY; y < visibleMaxY; y += world.blockSize) {
       for (let x = visibleMinX; x < visibleMaxX; x += world.blockSize) {
-        let box = world.getBlock(x, y);
         if (!tempAllObjs[x]) {
           tempAllObjs[x] = {};
         }
-
-        if (!tempAllObjs[x][y]) tempAllObjs[x][y] = box;
+        //if (!tempAllObjs[x][y]) tempAllObjs[x][y] = world.getBlock(x, y);
+        if (!tempAllObjs[x][y]) {
+          let box = world.getBlockAirNull(x, y);
+          if (box) tempAllObjs[x][y] = box;
+        }
       }
     }
 
@@ -72,16 +76,18 @@ const render = (canvas, world) => {
       }
     }
 
-    handleTimeInterval(timeSinceLastGravityCalculation, gravityCalculationRate, delta, () => {
-      // Increase gravity over time
-      if (gravity < maxGravity * dt) {
-        gravity += gravityIncreaseRate * dt;
-      }
-      if (gravity > maxGravity * dt) {
-        gravity = maxGravity * dt;
-      }
-      player.speedY = gravity;
-    });
+    console.log(tempAllObjs);
+
+    // handleTimeInterval(timeSinceLastGravityCalculation, gravityCalculationRate, delta, () => {
+    //   // Increase gravity over time
+    //   if (gravity < maxGravity * dt) {
+    //     gravity += gravityIncreaseRate * dt;
+    //   }
+    //   if (gravity > maxGravity * dt) {
+    //     gravity = maxGravity * dt;
+    //   }
+    //   player.speedY = gravity;
+    // });
     // Increase gravity over time
     // if (gravity < maxGravity * dt) {
     //   gravity += gravityIncreaseRate * dt;
@@ -118,8 +124,6 @@ const render = (canvas, world) => {
 
     print(tempAllObjs);
 
-    console.log(timeSinceLastCameraAdjustment, delta);
-
     handleTimeInterval(timeSinceLastCameraAdjustment, cameraAdjustmentIntervalRate, delta, () => {
       camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);
       camera.y = lerp(camera.y, player.y, smootherT);
@@ -129,10 +133,18 @@ const render = (canvas, world) => {
     player.update();
 
     UIstatistics.frames.updateText(`Frames Played: ${framesPlayed}`);
-    UIstatistics.frameRate.updateText(`FrameRate: ${(1000 / (totalDelta / framesPlayed)).toFixed(3)}`);
+    UIstatistics.frameRate.updateText(`Average FrameRate: ${(1000 / (totalDelta / framesPlayed)).toFixed(3)}`);
     UIstatistics.playerPosition.updateText(`Player's Position (x: ${player.x.toFixed(3)}, y: ${player.y.toFixed(3)})`);
     UIstatistics.playerSpeed.updateText(`Player's Speed (x: ${(player.speedX * dt).toFixed(3)}, y: ${player.speedY.toFixed(3)})`);
-
+    UIstatistics.windowBounds.updateText(
+      `Window Bounds: [(x: ${(player.x - canvasWidth / 2).toFixed(1)}, y: ${(player.y - canvasHeight / 2).toFixed(1)}), (x: ${(
+        player.x +
+        canvasWidth / 2
+      ).toFixed(1)}, y: ${(player.y + canvasHeight / 2).toFixed(1)})]`
+    );
+    UIstatistics.loadedBounds.updateText(
+      `Loaded Bounds [(x: ${visibleMinX}, y: ${visibleMinY}), (x: ${visibleMaxX}, y: ${visibleMaxY})]`
+    );
     printUIStatistics();
   }
 };

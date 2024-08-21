@@ -9,10 +9,12 @@ class WorldGenerator {
   };
 
   getBlock = (x, y) => {
-    var v = this.perlin.getIntensity(x, y) < 0.5 ? 0 : 1;
+    var v = this.perlin.getIntensity(x, y);
     return new Box(x, y, this.blockSize, this.blockSize, rgba(0, 0, 0, v));
   };
-}
 
-// perlin.setSeed(111634516782378);
-// perlin.setSeed(parseInt(Math.random() * 1000000));
+  getBlockAirNull = (x, y) => {
+    var v = this.perlin.getIntensity(x, y);
+    return v ? new Box(x, y, this.blockSize, this.blockSize, rgba(0, 0, 0, v)) : null;
+  };
+}
