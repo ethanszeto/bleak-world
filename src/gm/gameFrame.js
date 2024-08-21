@@ -89,13 +89,13 @@ const render = (canvas, world) => {
     //   player.speedY = gravity;
     // });
     // Increase gravity over time
-    // if (gravity < maxGravity * dt) {
-    //   gravity += gravityIncreaseRate * dt;
-    // }
-    // if (gravity > maxGravity * dt) {
-    //   gravity = maxGravity * dt;
-    // }
-    // player.speedY = gravity;
+    if (gravity < maxGravity * dt) {
+      gravity += gravityIncreaseRate * dt;
+    }
+    if (gravity > maxGravity * dt) {
+      gravity = maxGravity * dt;
+    }
+    player.speedY = gravity;
 
     // Horizontal movement
     if (gameSpace["a"]) {
