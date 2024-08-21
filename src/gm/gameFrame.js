@@ -48,40 +48,10 @@ const render = (canvas, world) => {
 
     let worldRowsList = [];
     for (let y = visibleMinY; y < visibleMaxY; y += world.blockSize) {
-      // for (let x = visibleMinX; x < visibleMaxX; x += world.blockSize) {
-      //   if (!tempAllObjs[x]) {
-      //     tempAllObjs[x] = {};
-      //   }
-      //   //if (!tempAllObjs[x][y]) tempAllObjs[x][y] = world.getBlock(x, y);
-      //   if (!tempAllObjs[x][y]) {
-      //     let box = world.getBlockAirNull(x, y);
-      //     if (box) tempAllObjs[x][y] = box;
-      //   }
-      // }
-
       worldRowsList.push(...world.getRowToRender(visibleMinX, visibleMaxX, y));
     }
 
     console.log(worldRowsList);
-
-    // Remove blocks outside the visible range
-    // for (let x in tempAllObjs) {
-    //   if (x < visibleMinX || x >= visibleMaxX) {
-    //     delete tempAllObjs[x]; // Remove entire column if out of range
-    //   } else {
-    //     for (let y in tempAllObjs[x]) {
-    //       if (y < visibleMinY || y >= visibleMaxY) {
-    //         delete tempAllObjs[x][y]; // Remove individual block if out of range
-    //       }
-    //     }
-    //     // Optionally, delete the x key if the column is empty
-    //     if (Object.keys(tempAllObjs[x]).length === 0) {
-    //       delete tempAllObjs[x];
-    //     }
-    //   }
-    // }
-
-    //console.log(tempAllObjs);
 
     if (gravity < maxGravity * dt) {
       gravity += gravityIncreaseRate * dt;
