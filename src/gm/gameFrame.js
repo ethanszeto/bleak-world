@@ -51,7 +51,7 @@ const render = (canvas, world) => {
       worldRowsList.push(...world.getRowToRender(visibleMinX, visibleMaxX, y));
     }
 
-    console.log(worldRowsList);
+    //console.log(worldRowsList);
 
     if (gravity < maxGravity * dt) {
       gravity += gravityIncreaseRate * dt;

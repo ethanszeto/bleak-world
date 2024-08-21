@@ -32,7 +32,7 @@ class WorldGenerator {
         if (tempBlockSpecs) {
           tempBlockSpecs.width += this.blockSize;
         } else {
-          tempBlockSpecs = new Box(x, y, this.blockSize, this.blockSize, rgba(0, 0, 0, v));
+          tempBlockSpecs = new Box(x, y, this.blockSize, this.blockSize + 1, rgba(0, 0, 0, v));
         }
       }
     }
