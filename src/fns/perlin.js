@@ -1,5 +1,5 @@
 // /**
-//  * Good defalts
+//  * Good defaults
 //  */
 class PerlinNoiseGenerator {
   constructor() {
@@ -83,17 +83,19 @@ class PerlinNoiseGenerator {
 
   getIntensity(x, y) {
     // Avoid scaling based on effective scale
-    const scaledX = x * this.baseScale;
-    const scaledY = y * this.baseScale;
+    let scaledX = x * this.baseScale;
+    let scaledY = y * this.baseScale;
 
     // Create a tunneling effect by blending multiple noise values
-    const noise1 = this.noise(scaledX, scaledY);
-    const noise2 = this.noise(scaledX + this.tunnelEffect, scaledY);
-    const noise3 = this.noise(scaledX, scaledY + this.tunnelEffect);
-    const intensity = (noise1 + noise2 + noise3 + 3) / 6; // Average the results
+    let intensity =
+      (this.noise(scaledX, scaledY) +
+        this.noise(scaledX + this.tunnelEffect, scaledY) +
+        this.noise(scaledX, scaledY + this.tunnelEffect) +
+        3) /
+      6; // Average the results
 
     // Smaller cave noise with a higher scale
-    const smallCaveNoise = this.noise(x * this.smallCaveScale, y * this.smallCaveScale);
+    let smallCaveNoise = this.noise(x * this.smallCaveScale, y * this.smallCaveScale);
 
     // Apply thresholding for caves
     if (intensity < this.threshold || smallCaveNoise < this.smallCaveThreshold) {

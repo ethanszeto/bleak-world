@@ -46,49 +46,43 @@ const render = (canvas, world) => {
       Math.round(player.y / world.blockSize) * world.blockSize - (Math.floor(halfCanvasHeight) - blockSizeMarginV);
     const visibleMaxY = visibleMinY + canvasHeight + blockSizeMarginV * -2 - world.blockSize * 3;
 
+    let worldRowsList = [];
     for (let y = visibleMinY; y < visibleMaxY; y += world.blockSize) {
-      for (let x = visibleMinX; x < visibleMaxX; x += world.blockSize) {
-        if (!tempAllObjs[x]) {
-          tempAllObjs[x] = {};
-        }
-        //if (!tempAllObjs[x][y]) tempAllObjs[x][y] = world.getBlock(x, y);
-        if (!tempAllObjs[x][y]) {
-          let box = world.getBlockAirNull(x, y);
-          if (box) tempAllObjs[x][y] = box;
-        }
-      }
+      // for (let x = visibleMinX; x < visibleMaxX; x += world.blockSize) {
+      //   if (!tempAllObjs[x]) {
+      //     tempAllObjs[x] = {};
+      //   }
+      //   //if (!tempAllObjs[x][y]) tempAllObjs[x][y] = world.getBlock(x, y);
+      //   if (!tempAllObjs[x][y]) {
+      //     let box = world.getBlockAirNull(x, y);
+      //     if (box) tempAllObjs[x][y] = box;
+      //   }
+      // }
+
+      worldRowsList.push(...world.getRowToRender(visibleMinX, visibleMaxX, y));
     }
+
+    console.log(worldRowsList);
 
     // Remove blocks outside the visible range
-    for (let x in tempAllObjs) {
-      if (x < visibleMinX || x >= visibleMaxX) {
-        delete tempAllObjs[x]; // Remove entire column if out of range
-      } else {
-        for (let y in tempAllObjs[x]) {
-          if (y < visibleMinY || y >= visibleMaxY) {
-            delete tempAllObjs[x][y]; // Remove individual block if out of range
-          }
-        }
-        // Optionally, delete the x key if the column is empty
-        if (Object.keys(tempAllObjs[x]).length === 0) {
-          delete tempAllObjs[x];
-        }
-      }
-    }
-
-    console.log(tempAllObjs);
-
-    // handleTimeInterval(timeSinceLastGravityCalculation, gravityCalculationRate, delta, () => {
-    //   // Increase gravity over time
-    //   if (gravity < maxGravity * dt) {
-    //     gravity += gravityIncreaseRate * dt;
+    // for (let x in tempAllObjs) {
+    //   if (x < visibleMinX || x >= visibleMaxX) {
+    //     delete tempAllObjs[x]; // Remove entire column if out of range
+    //   } else {
+    //     for (let y in tempAllObjs[x]) {
+    //       if (y < visibleMinY || y >= visibleMaxY) {
+    //         delete tempAllObjs[x][y]; // Remove individual block if out of range
+    //       }
+    //     }
+    //     // Optionally, delete the x key if the column is empty
+    //     if (Object.keys(tempAllObjs[x]).length === 0) {
+    //       delete tempAllObjs[x];
+    //     }
     //   }
-    //   if (gravity > maxGravity * dt) {
-    //     gravity = maxGravity * dt;
-    //   }
-    //   player.speedY = gravity;
-    // });
-    // Increase gravity over time
+    // }
+
+    //console.log(tempAllObjs);
+
     if (gravity < maxGravity * dt) {
       gravity += gravityIncreaseRate * dt;
     }
@@ -122,7 +116,8 @@ const render = (canvas, world) => {
       jumpState = 0;
     }
 
-    print(tempAllObjs);
+    //printObj(tempAllObjs);
+    printList(worldRowsList);
 
     handleTimeInterval(timeSinceLastCameraAdjustment, cameraAdjustmentIntervalRate, delta, () => {
       camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);

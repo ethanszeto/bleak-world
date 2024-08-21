@@ -19,7 +19,7 @@ window.addEventListener("load", () => {
     canvas.height = window.innerHeight;
     canvasHeight = canvas.height;
     render(canvas, world);
-  }, 32);
+  }, 33);
 });
 
 window.addEventListener("keydown", (e) => {

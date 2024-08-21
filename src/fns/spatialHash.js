@@ -1,7 +1,8 @@
 function getSpatialHash(x, y, width, height) {
-  // 25x25 blocks
-  let xMod = x % 25;
-  let yMod = y % 25;
+  // 16x16 blocks
+  let xMod = x % 16;
+  let yMod = y % 16;
+  let xChunk = Math.floor(x);
 
   return `${0}`;
 }
