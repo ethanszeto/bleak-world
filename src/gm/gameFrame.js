@@ -52,13 +52,13 @@ const render = (canvas, world) => {
 
     //console.log(worldRowsList);
 
-    // if (gravity < maxGravity) {
-    //   gravity += gravityIncreaseRate;
-    // }
-    // if (gravity > maxGravity) {
-    //   gravity = maxGravity;
-    // }
-    // player.speedY = gravity;
+    if (gravity < maxGravity) {
+      gravity += gravityIncreaseRate;
+    }
+    if (gravity > maxGravity) {
+      gravity = maxGravity;
+    }
+    player.speedY = gravity;
 
     // Horizontal movement
     if (gameSpace["a"]) {
