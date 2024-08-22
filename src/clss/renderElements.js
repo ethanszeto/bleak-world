@@ -5,7 +5,7 @@ class Base {
   }
 }
 
-class Text extends Base {
+class BaseText extends Base {
   constructor(x, y, color, font, text) {
     super(x, y);
     this.color = color;
@@ -106,8 +106,8 @@ class MovingBox extends Box {
     ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
     this.draw();
     ctx.restore();
-    this.x += this.speedX * dt;
-    this.y += this.speedY * dt;
+    this.x += this.speedX;
+    this.y += this.speedY;
   }
 }
 
@@ -119,7 +119,7 @@ class Player extends Box {
     ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
     this.draw();
     ctx.restore();
-    this.x += this.speedX * dt;
+    this.x += this.speedX;
     this.y += this.speedY; //gravity already uses dt, since its frame-incremental
   }
 }
@@ -127,5 +127,61 @@ class Player extends Box {
 class Camera extends Box {
   constructor(x = 0, y = 0, width = 0, height = 0, color = rgba(0, 0, 0, 0)) {
     super(x, y, width, height, color);
+  }
+}
+
+class BaseImage extends Base {
+  constructor(x, y, width, height, imageId) {
+    super(x, y);
+    this.width = width;
+    this.height = height;
+    this.imageId = imageId;
+  }
+
+  draw() {
+    let image = document.getElementById(this.imageId);
+    ctx.drawImage(image, this.x, this.y, this.width, this.height);
+  }
+
+  update() {
+    ctx.save();
+    ctx.translate(-camera.x + canvas.width / 2, -camera.y + canvas.height / 2);
+    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
+    this.draw();
+    ctx.restore();
+  }
+}
+
+class BaseAnimation extends Base {
+  constructor(x, y, width, height, frameIds) {
+    super(x, y);
+    this.width = width;
+    this.height = height;
+    this.frameIds = frameIds;
+    this.currentFrame = 0;
+    this.maxFrames = frameIds.length;
+  }
+
+  nextFrame() {
+    if (currentFrame == maxFrame) {
+      this.currentFrame = 0;
+    } else {
+      this.currentFrame++;
+    }
+  }
+
+  draw() {
+    let image = document.getElementById(this.frameIds[this.currentFrame]);
+    ctx.drawImage(image, this.x, this.y, this.width, this.height);
+  }
+
+  update() {
+    ctx.save();
+    ctx.translate(-camera.x + canvas.width / 2, -camera.y + canvas.height / 2);
+    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
+    this.draw();
+    ctx.restore();
   }
 }

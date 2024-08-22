@@ -19,7 +19,6 @@ const render = (canvas, world) => {
   }
   if (!paused) {
     now = performance.now();
-    dt = (now - lastUpdate) / 16;
     framesPlayed++;
     delta = now - lastUpdate;
     totalDelta += delta;
@@ -45,11 +44,11 @@ const render = (canvas, world) => {
 
     //console.log(worldRowsList);
 
-    if (gravity < maxGravity * dt) {
-      gravity += gravityIncreaseRate * dt;
+    if (gravity < maxGravity) {
+      gravity += gravityIncreaseRate;
     }
-    if (gravity > maxGravity * dt) {
-      gravity = maxGravity * dt;
+    if (gravity > maxGravity) {
+      gravity = maxGravity;
     }
     player.speedY = gravity;
 
@@ -65,27 +64,27 @@ const render = (canvas, world) => {
     if (!jumpState && (gameSpace[" "] || gameSpace["w"])) {
       // Space bar pressed and wasn't pressed before
       jumpState = 1;
-      gravity = initialGravity * dt;
+      gravity = initialGravity;
     }
 
-    if (jumpState && jumpState < 25) {
-      player.speedY = -(jumpState > 12 ? (25 - jumpState) * dt : jumpState * dt);
+    if (jumpState && jumpState < 12) {
+      player.speedY = -(jumpState > 6 ? (12 - jumpState) * 3 : jumpState * 3);
 
-      jumpState += dt;
-    } else if (jumpState && jumpState < 40) jumpState += dt;
-    if (jumpState >= 40) {
+      jumpState++;
+    } else if (jumpState && jumpState < 20) jumpState++;
+    if (jumpState >= 20) {
       // Reset spacePressed when the space bar is released
       jumpState = 0;
     }
 
-    //printObj(tempAllObjs);
     printList(worldRowsList);
+    let img = new BaseImage(800, 500, 200, 200, "bird01");
+    img.update();
+    let text = new BaseText(400, 400, rgba(255, 255, 255, 1), "30px Arial", "Bleak World");
+    text.update();
 
-    handleTimeInterval(timeSinceLastCameraAdjustment, cameraAdjustmentIntervalRate, delta, () => {
-      camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);
-      camera.y = lerp(camera.y, player.y, smootherT);
-    });
-
+    camera.x = bezier(t, camera.x, camera.x + (player.x - camera.x) * 0.5, camera.x + (player.x - camera.x) * 0.5, player.x);
+    camera.y = lerp(camera.y, player.y, smootherT);
     camera.update();
     player.update();
 
@@ -93,7 +92,7 @@ const render = (canvas, world) => {
     UIstatistics.avgFrameRate.updateText(`Average FrameRate: ${(1000 / (totalDelta / framesPlayed)).toFixed(3)}`);
     UIstatistics.frameRate.updateText(`Current FrameRate: ${(1000 / delta).toFixed(3)}`);
     UIstatistics.playerPosition.updateText(`Player's Position (x: ${player.x.toFixed(3)}, y: ${player.y.toFixed(3)})`);
-    UIstatistics.playerSpeed.updateText(`Player's Speed (x: ${(player.speedX * dt).toFixed(3)}, y: ${player.speedY.toFixed(3)})`);
+    UIstatistics.playerSpeed.updateText(`Player's Speed (x: ${player.speedX.toFixed(3)}, y: ${player.speedY.toFixed(3)})`);
     UIstatistics.windowBounds.updateText(
       `Window Bounds: [(x: ${(player.x - canvasWidth / 2).toFixed(1)}, y: ${(player.y - canvasHeight / 2).toFixed(1)}), (x: ${(
         player.x +

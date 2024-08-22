@@ -9,7 +9,6 @@ let halfCanvasHeight = canvasHeight / 2;
 let world;
 let ctx;
 let gameSpace = [];
-let playerSpeed = 4;
 let tempAllObjs = {};
 let UIstatistics;
 
@@ -20,9 +19,10 @@ const marginV = -12;
 const marginH = -4;
 
 // Gameplay Presets
-const initialGravity = 0.1;
-const gravityIncreaseRate = 0.25;
-const maxGravity = 8;
+let playerSpeed = 8;
+const initialGravity = 0;
+const gravityIncreaseRate = 0.4;
+const maxGravity = 16;
 let gravity = initialGravity;
 const cameraAdjustmentIntervalRate = 30;
 
