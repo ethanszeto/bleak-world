@@ -52,13 +52,13 @@ const render = (canvas, world) => {
 
     //console.log(worldRowsList);
 
-    if (gravity < maxGravity) {
-      gravity += gravityIncreaseRate;
-    }
-    if (gravity > maxGravity) {
-      gravity = maxGravity;
-    }
-    player.speedY = gravity;
+    // if (gravity < maxGravity) {
+    //   gravity += gravityIncreaseRate;
+    // }
+    // if (gravity > maxGravity) {
+    //   gravity = maxGravity;
+    // }
+    // player.speedY = gravity;
 
     // Horizontal movement
     if (gameSpace["a"]) {
@@ -89,6 +89,10 @@ const render = (canvas, world) => {
       jumpState = 0;
       playerSprite.currentFrame = 0;
     }
+    new BaseImage(0, 0, canvasWidth, canvasHeight, "haze").update();
+    new BaseImage(0, 0, canvasWidth, canvasHeight, "bg1").update();
+    new BaseImage(0, 0, canvasWidth, canvasHeight, "b1").update();
+    new BaseImage(0, 0, canvasWidth, canvasHeight, "haze").update();
 
     printList(worldRowsList);
     let text = new BaseText(400, 400, rgba(255, 255, 255, 1), "30px Arial", "Bleak World");
