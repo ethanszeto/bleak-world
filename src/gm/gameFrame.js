@@ -8,14 +8,6 @@ const setUpGameFrame = (canvas, world) => {
   uiStatisticsInitialize();
 };
 
-function smoothstep(t) {
-  return t ** 2 * (3 - 2 * t);
-}
-
-function smootherstep(t) {
-  return t ** 3 * (t * (t * 6 - 15) + 10);
-}
-
 const render = (canvas, world) => {
   if (gameSpace["Escape"] || !document.hasFocus()) {
     paused = true;
@@ -98,7 +90,8 @@ const render = (canvas, world) => {
     player.update();
 
     UIstatistics.frames.updateText(`Frames Played: ${framesPlayed}`);
-    UIstatistics.frameRate.updateText(`Average FrameRate: ${(1000 / (totalDelta / framesPlayed)).toFixed(3)}`);
+    UIstatistics.avgFrameRate.updateText(`Average FrameRate: ${(1000 / (totalDelta / framesPlayed)).toFixed(3)}`);
+    UIstatistics.frameRate.updateText(`Current FrameRate: ${(1000 / delta).toFixed(3)}`);
     UIstatistics.playerPosition.updateText(`Player's Position (x: ${player.x.toFixed(3)}, y: ${player.y.toFixed(3)})`);
     UIstatistics.playerSpeed.updateText(`Player's Speed (x: ${(player.speedX * dt).toFixed(3)}, y: ${player.speedY.toFixed(3)})`);
     UIstatistics.windowBounds.updateText(

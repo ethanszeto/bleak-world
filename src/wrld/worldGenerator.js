@@ -5,7 +5,6 @@ class WorldGenerator {
     this.blockCache = [[]];
     this.perlin = new PerlinNoiseGenerator();
     this.perlin.setSeed(seed);
-    //this.perlin.setScale(1, 5, this.zoom);
   };
 
   getBlock = (x, y) => {

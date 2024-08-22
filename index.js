@@ -1,6 +1,6 @@
-canvas = document.getElementById("canvas");
-
 window.addEventListener("load", () => {
+  canvas = document.getElementById("canvas");
+
   world = new WorldGenerator();
   //world.generate(111634516782378);
   world.generate(Math.floor(Math.random() * 1000000000000));
@@ -13,13 +13,14 @@ window.addEventListener("load", () => {
 
   setUpGameFrame(canvas, world);
 
+  // just above 30 fps
   setInterval(() => {
     canvas.width = window.innerWidth;
     canvasWidth = canvas.width;
     canvas.height = window.innerHeight;
     canvasHeight = canvas.height;
     render(canvas, world);
-  }, 33);
+  }, 32);
 });
 
 window.addEventListener("keydown", (e) => {

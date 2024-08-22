@@ -66,9 +66,9 @@ class PerlinNoiseGenerator {
     const v = this.fade(y);
 
     const aa = this.perm[X] + Y;
-    const ab = this.perm[X] + Y + 1;
+    const ab = aa + 1;
     const ba = this.perm[X + 1] + Y;
-    const bb = this.perm[X + 1] + Y + 1;
+    const bb = ba + 1;
 
     const gradAA = this.grad(this.perm[aa], x, y);
     const gradBA = this.grad(this.perm[ba], x - 1, y);
