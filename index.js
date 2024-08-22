@@ -23,6 +23,8 @@ window.addEventListener("load", () => {
   }, 32);
 });
 
+//make sure to change canvas on window resize
+
 window.addEventListener("keydown", (e) => {
   gameSpace[e.key] = true;
 });

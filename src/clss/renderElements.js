@@ -30,13 +30,13 @@ class BaseText extends Base {
   }
 }
 
-class UIText extends Text {
+class UIText extends BaseText {
   constructor(x, y, color, font, text) {
     super(x, y, color, font, text);
   }
 
   update() {
-    this.draw();
+    super.draw();
   }
 
   updateText(text) {
@@ -120,7 +120,7 @@ class Player extends Box {
     this.draw();
     ctx.restore();
     this.x += this.speedX;
-    this.y += this.speedY; //gravity already uses dt, since its frame-incremental
+    this.y += this.speedY;
   }
 }
 
@@ -160,11 +160,11 @@ class BaseAnimation extends Base {
     this.height = height;
     this.frameIds = frameIds;
     this.currentFrame = 0;
-    this.maxFrames = frameIds.length;
+    this.maxFrames = frameIds.length - 1;
   }
 
   nextFrame() {
-    if (currentFrame == maxFrame) {
+    if (this.currentFrame === this.maxFrames) {
       this.currentFrame = 0;
     } else {
       this.currentFrame++;
@@ -183,5 +183,18 @@ class BaseAnimation extends Base {
     ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
     this.draw();
     ctx.restore();
+  }
+}
+
+class MovingAnimation extends BaseAnimation {
+  update() {
+    ctx.save();
+    ctx.translate(-camera.x + canvas.width / 2, -camera.y + canvas.height / 2);
+    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
+    super.draw();
+    ctx.restore();
+    this.x += this.speedX;
+    this.y += this.speedY;
   }
 }

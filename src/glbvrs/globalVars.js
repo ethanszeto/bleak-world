@@ -1,5 +1,6 @@
 // Important Objects
 let player;
+let playerSprite;
 let camera;
 let canvas;
 let canvasHeight;
