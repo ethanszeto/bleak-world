@@ -40,3 +40,6 @@ let paused = false;
 let now;
 let timeSinceLastCameraAdjustment = [0];
 let delta;
+let bgPhotoDimensions = { x: 1728, y: 993 };
+let bgPhotosL1 = [];
+let bgPhotosL2 = [];
