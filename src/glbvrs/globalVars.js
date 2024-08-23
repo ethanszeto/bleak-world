@@ -45,6 +45,7 @@ let bgPhotosL1 = [];
 let bgPhotosL2 = [];
 
 let bgPhotosO1 = {};
+let bgPhotosO2 = {};
 
 const dialogue = `
 > Do you ever feel as if you're going no where?

@@ -1,7 +1,3 @@
-function bgObjHash(x, y) {
-  return `${x},${y}`;
-}
-
 const setUpGameFrame = (canvas, world) => {
   player = new Player(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize * 2, rgba(255, 255, 255, 0));
   playerSprite = new MovingAnimation(player.x - 40, player.y - 40, 100, 100, [
@@ -17,9 +13,9 @@ const setUpGameFrame = (canvas, world) => {
   halfCanvasHeight = canvasHeight / 2;
   blockSizeMarginH = world.blockSize * marginH;
   blockSizeMarginV = world.blockSize * marginV;
-  //bgPhotosL1.push(new TiledBackground(0, 0, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1"));
+
   bgPhotosO1[bgObjHash(0, 0)] = new TiledBackground(0, 0, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1");
-  bgPhotosL2.push(new TiledBackground(0, 0, bgPhotoDimensions.x, bgPhotoDimensions.y, "b1"));
+  bgPhotosO2[bgObjHash(0, 0)] = new TiledBackground(0, 0, bgPhotoDimensions.x, bgPhotoDimensions.y, "b1");
   uiStatisticsInitialize();
 };
 
@@ -97,6 +93,9 @@ const render = (canvas, world) => {
       playerSprite.currentFrame = 0;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    // Render elements
+
     /* TODO
     Find a way to abstract background tilings
     Find a way to prevent duplicates in bgPhotos upon insertion
@@ -109,154 +108,40 @@ const render = (canvas, world) => {
       rgba(123, 153, 103, 0.1)
     );
 
-    let bgSpanL1 = {};
+    generateBgObjs(haze1, bgPhotosO1, bgPhotoDimensions, visibleMinX, visibleMinY, visibleMaxX, visibleMaxY, "bg1");
+    generateBgObjs(haze1, bgPhotosO2, bgPhotoDimensions, visibleMinX, visibleMinY, visibleMaxX, visibleMaxY, "b1");
+
     for (const key in bgPhotosO1) {
-      if (
-        !Collision.boxWithBox(
-          new Box(bgPhotosO1[key].x, bgPhotosO1[key].y, bgPhotoDimensions.x * 2, bgPhotoDimensions.y * 2, rgba(0, 0, 0, 0)),
-          haze1
-        )
-      ) {
-        delete bgPhotosO1[key];
-        continue;
-      }
-      if (bgSpanL1.minX ?? true) {
-        bgSpanL1.minX = bgPhotosO1[key].x;
-        bgSpanL1.minY = bgPhotosO1[key].y;
-        bgSpanL1.maxX = bgPhotosO1[key].x + bgPhotoDimensions.x * 2;
-        bgSpanL1.maxY = bgPhotosO1[key].y + bgPhotoDimensions.y * 2;
-        continue;
-      }
-      bgSpanL1.minX = Math.min(bgPhotosO1[key].x, bgSpanL1.minX);
-      bgSpanL1.minY = Math.min(bgPhotosO1[key].y, bgSpanL1.minY);
-      bgSpanL1.maxX = Math.max(bgSpanL1.maxX, bgPhotosO1[key].x + bgPhotoDimensions.x * 2);
-      bgSpanL1.maxY = Math.max(bgSpanL1.maxY, bgPhotosO1[key].y + bgPhotoDimensions.y * 2);
+      const targetSpeedX = player.speedX !== 0 ? (player.speedX < 0 ? -0.1 : 0.1) : 0;
+      const targetSpeedY = jumpState !== 0 ? -0.1 : 0.1;
+
+      bgPhotosO1[key].speedX = lerp(bgPhotosO1[key].speedX, targetSpeedX, smootherT);
+      bgPhotosO1[key].speedY = lerp(bgPhotosO1[key].speedY, targetSpeedY, smootherT);
     }
 
-    if (bgSpanL1.minX > visibleMinX) {
-      for (let y = bgSpanL1.minY; y < visibleMaxY; y += bgPhotoDimensions.y * 2) {
-        let key = bgObjHash(bgSpanL1.minX - bgPhotoDimensions.x * 2, y);
-        if (!bgPhotosO1[key])
-          bgPhotosO1[key] = new TiledBackground(
-            bgSpanL1.minX - bgPhotoDimensions.x * 2,
-            y,
-            bgPhotoDimensions.x,
-            bgPhotoDimensions.y,
-            "bg1"
-          );
-      }
-    }
-    if (bgSpanL1.minY > visibleMinY) {
-      for (let x = bgSpanL1.minX; x < visibleMaxX; x += bgPhotoDimensions.x * 2) {
-        let key = bgObjHash(x, bgSpanL1.minY - bgPhotoDimensions.y * 2);
-        if (!bgPhotosO1[key])
-          bgPhotosO1[key] = new TiledBackground(
-            x,
-            bgSpanL1.minY - bgPhotoDimensions.y * 2,
-            bgPhotoDimensions.x,
-            bgPhotoDimensions.y,
-            "bg1"
-          );
-      }
-    }
-    if (bgSpanL1.maxX < visibleMaxX) {
-      for (let y = bgSpanL1.minY; y < visibleMaxY; y += bgPhotoDimensions.y * 2) {
-        let key = bgObjHash(bgSpanL1.minX + bgPhotoDimensions.x * 2);
-        if (!bgPhotosO1[key])
-          bgPhotosO1[key] = new TiledBackground(
-            bgSpanL1.minX + bgPhotoDimensions.x * 2,
-            y,
-            bgPhotoDimensions.x,
-            bgPhotoDimensions.y,
-            "bg1"
-          );
-      }
-    }
-    if (bgSpanL1.maxY < visibleMaxY) {
-      for (let x = bgSpanL1.minX; x < visibleMaxX; x += bgPhotoDimensions.x * 2) {
-        let key = bgObjHash(x, bgSpanL1.maxY);
-        if (!bgPhotosO1[key])
-          bgPhotosO1[key] = new TiledBackground(x, bgSpanL1.maxY, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1");
-      }
-    }
+    for (const key in bgPhotosO2) {
+      const targetSpeedX = player.speedX !== 0 ? (player.speedX < 0 ? -0.05 : 0.05) : 0;
+      const targetSpeedY = jumpState !== 0 ? -0.05 : 0.05;
 
-    let bgSpanL2 = {};
-    for (let i = 0; i < bgPhotosL2.length; i++) {
-      if (
-        !Collision.boxWithBox(
-          new Box(bgPhotosL2[i].x, bgPhotosL2[i].y, bgPhotoDimensions.x * 2, bgPhotoDimensions.y * 2, rgba(0, 0, 0, 0)),
-          haze1
-        )
-      ) {
-        bgPhotosL2.splice(i, 1);
-        i--;
-        continue;
-      }
-      if (bgSpanL2.minX ?? true) {
-        bgSpanL2.minX = bgPhotosL2[i].x;
-        bgSpanL2.minY = bgPhotosL2[i].y;
-        bgSpanL2.maxX = bgPhotosL2[i].x + bgPhotoDimensions.x * 2;
-        bgSpanL2.maxY = bgPhotosL2[i].y + bgPhotoDimensions.y * 2;
-        continue;
-      }
-      bgSpanL2.minX = Math.min(bgPhotosL2[i].x, bgSpanL2.minX);
-      bgSpanL2.minY = Math.min(bgPhotosL2[i].y, bgSpanL2.minY);
-      bgSpanL2.maxX = Math.max(bgSpanL2.maxX, bgPhotosL2[i].x + bgPhotoDimensions.x * 2);
-      bgSpanL2.maxY = Math.max(bgSpanL2.maxY, bgPhotosL2[i].y + bgPhotoDimensions.y * 2);
+      bgPhotosO2[key].speedX = lerp(bgPhotosO2[key].speedX, targetSpeedX, smootherT);
+      bgPhotosO2[key].speedY = lerp(bgPhotosO2[key].speedY, targetSpeedY, smootherT);
     }
-
-    if (bgSpanL2.minX > visibleMinX) {
-      for (let y = bgSpanL2.minY; y < visibleMaxY; y += bgPhotoDimensions.y * 2) {
-        bgPhotosL2.push(
-          new TiledBackground(bgSpanL2.minX - bgPhotoDimensions.x * 2, y, bgPhotoDimensions.x, bgPhotoDimensions.y, "b1")
-        );
-      }
-    }
-    if (bgSpanL2.minY > visibleMinY) {
-      for (let x = bgSpanL2.minX; x < visibleMaxX; x += bgPhotoDimensions.x * 2) {
-        bgPhotosL2.push(
-          new TiledBackground(x, bgSpanL2.minY - bgPhotoDimensions.y * 2, bgPhotoDimensions.x, bgPhotoDimensions.y, "b1")
-        );
-      }
-    }
-    if (bgSpanL2.maxX < visibleMaxX) {
-      for (let y = bgSpanL2.minY; y < visibleMaxY; y += bgPhotoDimensions.y * 2) {
-        bgPhotosL2.push(
-          new TiledBackground(bgSpanL2.minX + bgPhotoDimensions.x * 2, y, bgPhotoDimensions.x, bgPhotoDimensions.y, "b1")
-        );
-      }
-    }
-    if (bgSpanL2.maxY < visibleMaxY) {
-      for (let x = bgSpanL2.minX; x < visibleMaxX; x += bgPhotoDimensions.x * 2) {
-        bgPhotosL2.push(new TiledBackground(x, bgSpanL2.maxY, bgPhotoDimensions.x, bgPhotoDimensions.y, "b1"));
-      }
-    }
-
-    // for (const tile of bgPhotosL1) {
-    //   tile.speedX = player.speedX / 7;
-    //   tile.speedY = gameSpace[" "] || gameSpace["w"] ? -0.1 : player.speedY / 7;
-    // }
-
-    // for (const tile of bgPhotosL2) {
-    //   tile.speedX = player.speedX / 8;
-    //   tile.speedY = gameSpace[" "] || gameSpace["w"] ? -0.1 : player.speedY / 8;
-    // }
-
-    console.log(bgPhotosO1);
 
     haze1.update();
 
     //draw bg here
-    //printList(bgPhotosL1);
     printObj(bgPhotosO1);
-    printList(bgPhotosL2);
+    printObj(bgPhotosO2);
+
+    console.log(bgPhotosO1);
+    console.log(bgPhotosO2);
 
     new MovingBox(
       camera.x - halfCanvasWidth,
       camera.y - halfCanvasHeight,
       canvasWidth,
       canvasHeight,
-      rgba(123, 153, 103, 0.1)
+      rgba(123, 153, 103, 0.15)
     ).update();
 
     printList(worldRowsList);
