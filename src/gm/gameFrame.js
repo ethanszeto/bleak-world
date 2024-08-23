@@ -1,3 +1,7 @@
+function bgObjHash(x, y) {
+  return `${x},${y}`;
+}
+
 const setUpGameFrame = (canvas, world) => {
   player = new Player(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize * 2, rgba(255, 255, 255, 0));
   playerSprite = new MovingAnimation(player.x - 40, player.y - 40, 100, 100, [
@@ -13,7 +17,8 @@ const setUpGameFrame = (canvas, world) => {
   halfCanvasHeight = canvasHeight / 2;
   blockSizeMarginH = world.blockSize * marginH;
   blockSizeMarginV = world.blockSize * marginV;
-  bgPhotosL1.push(new TiledBackground(0, 0, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1"));
+  //bgPhotosL1.push(new TiledBackground(0, 0, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1"));
+  bgPhotosO1[bgObjHash(0, 0)] = new TiledBackground(0, 0, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1");
   bgPhotosL2.push(new TiledBackground(0, 0, bgPhotoDimensions.x, bgPhotoDimensions.y, "b1"));
   uiStatisticsInitialize();
 };
@@ -105,54 +110,73 @@ const render = (canvas, world) => {
     );
 
     let bgSpanL1 = {};
-    for (let i = 0; i < bgPhotosL1.length; i++) {
+    for (const key in bgPhotosO1) {
       if (
         !Collision.boxWithBox(
-          new Box(bgPhotosL1[i].x, bgPhotosL1[i].y, bgPhotoDimensions.x * 2, bgPhotoDimensions.y * 2, rgba(0, 0, 0, 0)),
+          new Box(bgPhotosO1[key].x, bgPhotosO1[key].y, bgPhotoDimensions.x * 2, bgPhotoDimensions.y * 2, rgba(0, 0, 0, 0)),
           haze1
         )
       ) {
-        bgPhotosL1.splice(i, 1);
-        i--;
+        delete bgPhotosO1[key];
         continue;
       }
       if (bgSpanL1.minX ?? true) {
-        bgSpanL1.minX = bgPhotosL1[i].x;
-        bgSpanL1.minY = bgPhotosL1[i].y;
-        bgSpanL1.maxX = bgPhotosL1[i].x + bgPhotoDimensions.x * 2;
-        bgSpanL1.maxY = bgPhotosL1[i].y + bgPhotoDimensions.y * 2;
+        bgSpanL1.minX = bgPhotosO1[key].x;
+        bgSpanL1.minY = bgPhotosO1[key].y;
+        bgSpanL1.maxX = bgPhotosO1[key].x + bgPhotoDimensions.x * 2;
+        bgSpanL1.maxY = bgPhotosO1[key].y + bgPhotoDimensions.y * 2;
         continue;
       }
-      bgSpanL1.minX = Math.min(bgPhotosL1[i].x, bgSpanL1.minX);
-      bgSpanL1.minY = Math.min(bgPhotosL1[i].y, bgSpanL1.minY);
-      bgSpanL1.maxX = Math.max(bgSpanL1.maxX, bgPhotosL1[i].x + bgPhotoDimensions.x * 2);
-      bgSpanL1.maxY = Math.max(bgSpanL1.maxY, bgPhotosL1[i].y + bgPhotoDimensions.y * 2);
+      bgSpanL1.minX = Math.min(bgPhotosO1[key].x, bgSpanL1.minX);
+      bgSpanL1.minY = Math.min(bgPhotosO1[key].y, bgSpanL1.minY);
+      bgSpanL1.maxX = Math.max(bgSpanL1.maxX, bgPhotosO1[key].x + bgPhotoDimensions.x * 2);
+      bgSpanL1.maxY = Math.max(bgSpanL1.maxY, bgPhotosO1[key].y + bgPhotoDimensions.y * 2);
     }
 
     if (bgSpanL1.minX > visibleMinX) {
       for (let y = bgSpanL1.minY; y < visibleMaxY; y += bgPhotoDimensions.y * 2) {
-        bgPhotosL1.push(
-          new TiledBackground(bgSpanL1.minX - bgPhotoDimensions.x * 2, y, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1")
-        );
+        let key = bgObjHash(bgSpanL1.minX - bgPhotoDimensions.x * 2, y);
+        if (!bgPhotosO1[key])
+          bgPhotosO1[key] = new TiledBackground(
+            bgSpanL1.minX - bgPhotoDimensions.x * 2,
+            y,
+            bgPhotoDimensions.x,
+            bgPhotoDimensions.y,
+            "bg1"
+          );
       }
     }
     if (bgSpanL1.minY > visibleMinY) {
       for (let x = bgSpanL1.minX; x < visibleMaxX; x += bgPhotoDimensions.x * 2) {
-        bgPhotosL1.push(
-          new TiledBackground(x, bgSpanL1.minY - bgPhotoDimensions.y * 2, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1")
-        );
+        let key = bgObjHash(x, bgSpanL1.minY - bgPhotoDimensions.y * 2);
+        if (!bgPhotosO1[key])
+          bgPhotosO1[key] = new TiledBackground(
+            x,
+            bgSpanL1.minY - bgPhotoDimensions.y * 2,
+            bgPhotoDimensions.x,
+            bgPhotoDimensions.y,
+            "bg1"
+          );
       }
     }
     if (bgSpanL1.maxX < visibleMaxX) {
       for (let y = bgSpanL1.minY; y < visibleMaxY; y += bgPhotoDimensions.y * 2) {
-        bgPhotosL1.push(
-          new TiledBackground(bgSpanL1.minX + bgPhotoDimensions.x * 2, y, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1")
-        );
+        let key = bgObjHash(bgSpanL1.minX + bgPhotoDimensions.x * 2);
+        if (!bgPhotosO1[key])
+          bgPhotosO1[key] = new TiledBackground(
+            bgSpanL1.minX + bgPhotoDimensions.x * 2,
+            y,
+            bgPhotoDimensions.x,
+            bgPhotoDimensions.y,
+            "bg1"
+          );
       }
     }
     if (bgSpanL1.maxY < visibleMaxY) {
       for (let x = bgSpanL1.minX; x < visibleMaxX; x += bgPhotoDimensions.x * 2) {
-        bgPhotosL1.push(new TiledBackground(x, bgSpanL1.maxY, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1"));
+        let key = bgObjHash(x, bgSpanL1.maxY);
+        if (!bgPhotosO1[key])
+          bgPhotosO1[key] = new TiledBackground(x, bgSpanL1.maxY, bgPhotoDimensions.x, bgPhotoDimensions.y, "bg1");
       }
     }
 
@@ -208,21 +232,23 @@ const render = (canvas, world) => {
       }
     }
 
-    for (const tile of bgPhotosL1) {
-      tile.speedX = player.speedX / 7;
-      tile.speedY = gameSpace[" "] || gameSpace["w"] ? -0.1 : player.speedY / 7;
-    }
+    // for (const tile of bgPhotosL1) {
+    //   tile.speedX = player.speedX / 7;
+    //   tile.speedY = gameSpace[" "] || gameSpace["w"] ? -0.1 : player.speedY / 7;
+    // }
 
-    for (const tile of bgPhotosL2) {
-      tile.speedX = player.speedX / 8;
-      tile.speedY = gameSpace[" "] || gameSpace["w"] ? -0.1 : player.speedY / 8;
-    }
-    console.log(bgPhotosL2);
+    // for (const tile of bgPhotosL2) {
+    //   tile.speedX = player.speedX / 8;
+    //   tile.speedY = gameSpace[" "] || gameSpace["w"] ? -0.1 : player.speedY / 8;
+    // }
+
+    console.log(bgPhotosO1);
 
     haze1.update();
 
     //draw bg here
-    printList(bgPhotosL1);
+    //printList(bgPhotosL1);
+    printObj(bgPhotosO1);
     printList(bgPhotosL2);
 
     new MovingBox(
