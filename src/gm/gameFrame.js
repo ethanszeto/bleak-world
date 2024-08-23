@@ -91,6 +91,11 @@ const render = (canvas, world) => {
       jumpState = 0;
       playerSprite.currentFrame = 0;
     }
+
+    /* TODO
+    Find a way to abstract background tilings
+    Find a way to prevent duplicates in bgPhotos upon insertion
+    */
     let haze1 = new MovingBox(
       camera.x - halfCanvasWidth,
       camera.y - halfCanvasHeight,

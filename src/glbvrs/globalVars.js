@@ -43,3 +43,39 @@ let delta;
 let bgPhotoDimensions = { x: 1728, y: 993 };
 let bgPhotosL1 = [];
 let bgPhotosL2 = [];
+
+const dialogue = `
+> Do you ever feel as if you're going no where?
+.
+.
+.
+>> Mentally or physically?
+.
+.
+.
+> How about both. Let's start with mentally.
+.
+.
+.
+>> Routine erodes time, passing years carelessly. Monotony weathersthe mind. But occasionally you find someone that breathes life into the world. Giving it colour. Giving it and movement. 
+.
+.
+.
+> Like a Prometheus of life, perhaps, of love?
+.
+.
+.
+>> If only Prometheus unwittingly brought fire to the heart of man.
+.
+.
+.
+> And physically?
+.
+.
+.
+>> Physically, I wish to be a bird, to simply fly away from the problems. Migrate from the monotony, the sadness, the disappointment. Build a nest somewhere safe and warm, with colour, with excitement. 
+.
+.
+.
+> But unfortunately we must live with a bleak world, as a bird that can never nestle in tranquility.
+`;
