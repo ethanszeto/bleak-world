@@ -8,7 +8,7 @@ const setUpGameFrame = (canvas, world) => {
     "birdright04",
     "birdright05",
   ]);
-  camera = new Camera(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize, rgba(0, 0, 0, 0));
+  camera = new Camera(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize, rgba(255, 255, 255, 0));
   halfCanvasWidth = canvasWidth / 2;
   halfCanvasHeight = canvasHeight / 2;
   blockSizeMarginH = world.blockSize * marginH;
@@ -86,8 +86,8 @@ const render = (canvas, world) => {
       player.speedY = -(jumpState > 6 ? (12 - jumpState) * 3 : jumpState * 3);
 
       jumpState++;
-    } else if (jumpState && jumpState < 20) jumpState++;
-    if (jumpState >= 20) {
+    } else if (jumpState && jumpState < 17) jumpState++;
+    if (jumpState >= 17) {
       // Reset spacePressed when the space bar is released
       jumpState = 0;
       playerSprite.currentFrame = 0;
@@ -132,9 +132,6 @@ const render = (canvas, world) => {
     //draw bg here
     printObj(bgPhotosO1);
     printObj(bgPhotosO2);
-
-    console.log(bgPhotosO1);
-    console.log(bgPhotosO2);
 
     new MovingBox(
       camera.x - halfCanvasWidth,
