@@ -29,16 +29,6 @@ body {
   font: 5vh "Courier New";
 }
 
-#open-start-selection:hover {
-  scale: 1.05;
-  transition: 0.25s;
-}
-
-#open-start-selection:not(:hover) {
-  scale: 1;
-  transition: 0.25s;
-}
-
 #world-options {
   display: none;
   text-align: center;
@@ -58,6 +48,10 @@ body {
 
 #start-game {
   margin-top: 5vh;
+}
+
+#prologue {
+  display: none;
 }
 
 #canvas {
@@ -81,6 +75,16 @@ body {
   background-color: transparent;
   padding: 1vh 2vw 1vh 2vw;
   border: 3px solid #000000;
+}
+
+.btn:hover {
+  scale: 1.05;
+  transition: 0.25s;
+}
+
+.btn:not(:hover) {
+  scale: 1;
+  transition: 0.25s;
 }
 
 .txtInput {
