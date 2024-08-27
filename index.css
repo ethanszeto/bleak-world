@@ -19,11 +19,14 @@ body {
 
 #title-page {
   text-align: center;
+  right: 50%;
+  bottom: 60%;
+  transform: translate(50%, 60%);
+  position: absolute;
 }
 
 #title-header {
-  margin-top: 33vh;
-  font: 5vw "Courier New";
+  font: 5vh "Courier New";
 }
 
 #open-start-selection:hover {
@@ -39,20 +42,22 @@ body {
 #world-options {
   display: none;
   text-align: center;
+  right: 50%;
+  bottom: 60%;
+  transform: translate(50%, 60%);
+  position: absolute;
 }
 
 #world-options-header {
-  margin-top: 10vh;
-  font: 5vw "Courier New";
+  font: 5vh "Courier New";
 }
 
 #advanced-options {
-  margin-top: -5vh;
   display: none;
 }
 
 #start-game {
-  margin-top: 1vh;
+  margin-top: 5vh;
 }
 
 #canvas {
@@ -71,7 +76,7 @@ body {
 }
 
 .btn {
-  font: 2vw "Courier New";
+  font: 2vh "Courier New";
   color: #000000;
   background-color: transparent;
   padding: 1vh 2vw 1vh 2vw;
@@ -79,11 +84,11 @@ body {
 }
 
 .txtInput {
-  font: 2vw "Courier New";
+  font: 2vh "Courier New";
 }
 
 .input-label {
-  font: 2vw "Courier New";
+  font: 2vh "Courier New";
   text-align: right;
 }
 
