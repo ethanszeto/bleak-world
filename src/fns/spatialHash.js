@@ -13,5 +13,9 @@ function getSpatialHash(x, y, width, height) {
 }
 
 function spatialHash(x, y) {
-  return `${Math.round(x / 240) * 240}|${Math.round(y / 240) * 240}`;
+  return `${Math.round(x / 256) * 256}|${Math.round(y / 256) * 256}`;
+}
+
+function getSpatialHashCircle(x, y, radius) {
+  return getSpatialHash(x - radius, y - radius, radius * 2, radius * 2);
 }

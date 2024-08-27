@@ -3,7 +3,7 @@ function roundToNearest(num, n) {
 }
 
 function bgObjHash(x, y) {
-  return `${roundToNearest(x, bgPhotoDimensions.x)},${roundToNearest(y, bgPhotoDimensions.y)}`;
+  return `${roundToNearest(x, bgPhotoDimensions.x)}|${roundToNearest(y, bgPhotoDimensions.y)}`;
 }
 
 const generateBgObjs = (

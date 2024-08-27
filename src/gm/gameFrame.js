@@ -1,5 +1,5 @@
 const setUpGameFrame = (canvas, world) => {
-  player = new Player(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize * 2, rgba(255, 255, 255, 0));
+  player = new Player(canvasWidth / 2, canvasHeight / 2, world.blockSize, world.blockSize * 2, rgba(255, 255, 255, 0.5));
   playerSprite = new MovingAnimation(player.x - 40, player.y - 40, 100, 100, [
     "birdright00",
     "birdright01",
@@ -142,6 +142,7 @@ const render = (canvas, world) => {
     ).update();
 
     printList(worldRowsList);
+
     let text = new BaseText(400, 400, rgba(255, 255, 255, 1), "30px Arial", "Bleak World");
     text.update();
     playerSprite.speedX = player.speedX;

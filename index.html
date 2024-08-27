@@ -38,6 +38,45 @@
       <image id="b1" src="./src/assts/bg/layer2/b1s.png" />
       <image id="bg1" src="./src/assts/bg/layer3/bg1s.png" />
     </div>
+    <div id="title-page">
+      <h1 id="title-header">bleak.world</h1>
+      <button id="open-start-selection" class="btn">start</button>
+    </div>
+    <div id="world-options">
+      <h1 id="world-options-header">world.options</h1>
+
+      <br />
+      <button id="open-advanced" class="btn">> advanced.options</button>
+      <br />
+      <div id="advanced-options" class="grid-container">
+        <label for="world-seed" class="input-label">seed.</label>
+        <input id="world-seed" type="number" class="txtInput" />
+        <label for="scale" class="input-label">scale.</label>
+        <input id="scale" type="number" class="txtInput" />
+        <label for="variation-scale" class="input-label">variation.scale.</label>
+        <input id="variation-scale" type="number" class="txtInput" />
+        <label for="variation-intensity" class="input-label">variation.intensity.</label>
+        <input id="variation-intensity" type="number" class="txtInput" />
+        <label for="cave-threshold" class="input-label">cave.threshold.</label>
+        <input id="cave-threshold" type="number" class="txtInput" />
+        <label for="small-cave-threshold" class="input-label">small.cave.threshold.</label>
+        <input id="small-cave-threshold" type="number" class="txtInput" />
+        <label for="small-cave-scale" class="input-label">small.cave.scale.</label>
+        <input id="small-cave-scale" type="number" class="txtInput" />
+        <label for="tunnel-effect" class="input-label">tunnel.effect.</label>
+        <input id="tunnel-effect" type="number" class="txtInput" />
+        <label for="initial-gravity" class="input-label">initial.gravity.</label>
+        <input id="initial-gravity" type="number" class="txtInput" />
+        <label for="gravity-increase-rate" class="input-label">gravity.increase.rate.</label>
+        <input id="gravity-increase-rate" type="number" class="txtInput" />
+        <label for="max-gravity" class="input-label">max.gravity.</label>
+        <input id="max-gravity" type="number" class="txtInput" />
+        <label for="player-speed" class="input-label">player.speed.</label>
+        <input id="player-speed" type="number" class="txtInput" />
+      </div>
+      <br />
+      <button id="start-game" class="btn">generate.world</button>
+    </div>
     <canvas id="canvas"></canvas>
   </body>
 </html>

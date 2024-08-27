@@ -2,6 +2,57 @@ html,
 body {
   margin: 0 !important;
   padding: 0 !important;
+  animation: fadeInAnimation ease 3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+#title-page {
+  text-align: center;
+}
+
+#title-header {
+  margin-top: 33vh;
+  font: 5vw "Courier New";
+}
+
+#open-start-selection:hover {
+  scale: 1.05;
+  transition: 0.25s;
+}
+
+#open-start-selection:not(:hover) {
+  scale: 1;
+  transition: 0.25s;
+}
+
+#world-options {
+  display: none;
+  text-align: center;
+}
+
+#world-options-header {
+  margin-top: 10vh;
+  font: 5vw "Courier New";
+}
+
+#advanced-options {
+  margin-top: -5vh;
+  display: none;
+}
+
+#start-game {
+  margin-top: 1vh;
 }
 
 #canvas {
@@ -11,9 +62,37 @@ body {
   width: 100%;
   height: 100%;
   background-color: #000000;
+  display: none;
   /*#145d09*/
 }
 
 #assets {
   display: none;
+}
+
+.btn {
+  font: 2vw "Courier New";
+  color: #000000;
+  background-color: transparent;
+  padding: 1vh 2vw 1vh 2vw;
+  border: 3px solid #000000;
+}
+
+.txtInput {
+  font: 2vw "Courier New";
+}
+
+.input-label {
+  font: 2vw "Courier New";
+  text-align: right;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }

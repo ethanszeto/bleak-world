@@ -25,25 +25,77 @@ const initialGravity = 0;
 const gravityIncreaseRate = 0.4;
 const maxGravity = 16;
 let gravity = initialGravity;
-const cameraAdjustmentIntervalRate = 30;
+
+// Any preset values/objs that do not change
+const presets = {
+  playerSpeed: 8,
+  bgPhotoDimensions: { x: 1728, y: 993 },
+  gravity: {
+    initial: 0,
+    increaseRate: 0.4,
+    max: 16,
+  },
+  worldGen: {
+    baseScale: 0.002,
+    variationScale: 0.003,
+    variationIntensity: 0.003,
+    threshold: 0.4,
+    smallCaveThreshold: 0.01,
+    smallCaveScale: 0.0015,
+    tunnelEffect: 0.5,
+    t: 0.25,
+    smootherT: t * t * t * (t * (t * 6 - 15) + 10),
+    blockSize: 16,
+    marginV: -12,
+    marginH: -4,
+    blockSizeMarginV: 16 * -12,
+    blockSizeMarginH: 16 * -4,
+  },
+};
+
+// Any values/objs that change based on the game
+const state = {
+  entities: {
+    player: {
+      player: undefined,
+      playerSprite: undefined,
+      jumpState: 0,
+      jumpCounter: 0,
+    },
+  },
+  world: {
+    world: undefined,
+    seed: Math.floor(Math.random() * 1000000000000),
+    tempAllObjs: {},
+    gravity: 0,
+    bgPhotosO1: {},
+    bgPhotosO2: {},
+  },
+  paused: false,
+  camera: undefined,
+  canvas: undefined,
+  ctx: undefined,
+  UIstatistics: undefined,
+  lastUpdate: performance.now(),
+  now: performance.now(),
+  delta: 0,
+  totalDelta: 0,
+  gameSpace: [],
+  framesPlayed: 0,
+};
 
 // Game State
 let jumpState = 0;
 let jumpCounter = 0;
 let blockSizeMarginH;
 let blockSizeMarginV;
-let dt = 1;
 let lastUpdate = performance.now();
 let totalDelta = 0;
 let framesPlayed = 0;
 let paused = false;
 let now;
-let timeSinceLastCameraAdjustment = [0];
 let delta;
 let bgPhotoDimensions = { x: 1728, y: 993 };
-let bgPhotosL1 = [];
-let bgPhotosL2 = [];
-
 let bgPhotosO1 = {};
 let bgPhotosO2 = {};
 
