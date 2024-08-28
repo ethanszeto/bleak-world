@@ -98,11 +98,7 @@ document.getElementById("open-advanced").addEventListener("click", () => {
 window.addEventListener(
   "keydown",
   (e) => {
-    if (
-      (document.getElementById("world-options").style.display === "block" ||
-        document.getElementById("title-page").style.display === "") &&
-      e.key === "q"
-    ) {
+    if (e.key === "q") {
       startGame();
     }
   },
