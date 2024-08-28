@@ -52,6 +52,8 @@ body {
 
 #prologue {
   display: none;
+  font: 2vh "Courier New";
+  padding: 0vh 5vw 0vh 5vw;
 }
 
 #canvas {

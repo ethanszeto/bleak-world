@@ -1,6 +1,7 @@
 startGame = () => {
   document.getElementById("title-page").style.display = "none";
   document.getElementById("world-options").style.display = "none";
+  document.getElementById("prologue").style.display = "none";
   document.getElementById("canvas").style.display = "block";
   lastUpdate = performance.now();
   now = performance.now();
@@ -47,7 +48,44 @@ document.getElementById("open-start-selection").addEventListener("click", () => 
 });
 
 document.getElementById("start-game").addEventListener("click", () => {
-  startGame();
+  document.getElementById("title-page").style.display = "none";
+  document.getElementById("world-options").style.display = "none";
+  document.getElementById("prologue").style.display = "block";
+  let i = 0;
+  let speed = 25;
+  const typeEffect = () => {
+    if (i < dialogue.length) {
+      let textToAdd = "";
+      if (
+        (dialogue.charAt(i) === " " && dialogue.charAt(i + 1) === " ") ||
+        dialogue.charAt(i) === "." ||
+        dialogue.charAt(i) === ","
+      ) {
+        speed = 500;
+      } else {
+        speed = 25;
+      }
+      console.log(dialogue.substring(i, i + 5));
+      if (dialogue.substring(i, i + 5) === "     ") {
+        textToAdd += "<br/>";
+      }
+
+      if (dialogue.charAt(i) === ">" && dialogue.charAt(i + 1) === ">") {
+        textToAdd += "<br/>";
+      } else if (dialogue.charAt(i) === ">" && dialogue.charAt(i - 1) !== ">") {
+        textToAdd += "<br/>";
+      }
+
+      textToAdd += dialogue.charAt(i);
+      document.getElementById("dialogue").innerHTML += textToAdd;
+      i++;
+
+      setTimeout(typeEffect, speed);
+    } else {
+      startGame();
+    }
+  };
+  typeEffect();
 });
 
 document.getElementById("open-advanced").addEventListener("click", () => {
