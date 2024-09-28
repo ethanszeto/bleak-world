@@ -1,6 +1,6 @@
-# manual
+# Bleak World
 
-A project where I explore the depths of mathematics' application in game development. The project has no dependencies, and all mathematical functions are written manually, hence the name. 
+A project where I explore the depths of mathematics' application in game development. The project has no dependencies, and all mathematical functions are written manually.
 
 ## Mathematics Used:
 - Perlin Noise
